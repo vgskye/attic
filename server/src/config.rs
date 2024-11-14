@@ -19,7 +19,7 @@ use crate::access::{
     decode_token_rs256_secret_base64, HS256Key, RS256KeyPair, RS256PublicKey,
 };
 use crate::narinfo::Compression as NixCompression;
-use crate::storage::{LocalStorageConfig, S3StorageConfig};
+use crate::storage::{BunnyStorageConfig, LocalStorageConfig, S3StorageConfig};
 
 /// Application prefix in XDG base directories.
 ///
@@ -225,6 +225,10 @@ pub enum StorageConfig {
     /// S3 storage.
     #[serde(rename = "s3")]
     S3(S3StorageConfig),
+
+    /// Bunny Storage.
+    #[serde(rename = "bunny")]
+    Bunny(BunnyStorageConfig),
 }
 
 /// Data chunking.

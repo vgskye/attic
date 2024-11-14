@@ -1,5 +1,6 @@
 //! Remote file storage.
 
+mod bunny;
 mod local;
 mod s3;
 
@@ -10,6 +11,7 @@ use crate::error::ServerResult;
 
 pub(crate) use self::local::{LocalBackend, LocalRemoteFile, LocalStorageConfig};
 pub(crate) use self::s3::{S3Backend, S3RemoteFile, S3StorageConfig};
+pub(crate) use self::bunny::{BunnyBackend, BunnyRemoteFile, BunnyStorageConfig};
 
 /// Reference to a location where a NAR is stored.
 ///
@@ -21,6 +23,9 @@ pub(crate) use self::s3::{S3Backend, S3RemoteFile, S3StorageConfig};
 pub enum RemoteFile {
     /// File in an S3-compatible storage bucket.
     S3(S3RemoteFile),
+
+    /// File in a Bunny Storage bucket.
+    Bunny(BunnyRemoteFile),
 
     /// File in local storage.
     Local(LocalRemoteFile),
@@ -83,6 +88,7 @@ impl RemoteFile {
     pub fn remote_file_id(&self) -> String {
         match self {
             Self::S3(f) => format!("s3:{}/{}/{}", f.region, f.bucket, f.key),
+            Self::Bunny(f) => format!("bunny:{}", f.key),
             Self::Http(f) => format!("http:{}", f.url),
             Self::Local(f) => format!("local:{}", f.name),
         }
